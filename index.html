@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기타 연습용 음악 플레이어</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        
+        .top-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .drop-zone {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: left;
+            background: #f0f4ff;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .drop-zone.drag-over {
+            background: #e0e8ff;
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+        
+        .drop-zone h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .drop-zone p {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .settings-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .setting-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .setting-label {
+            min-width: 100px;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9em;
+        }
+        
+        .setting-control {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .speed-btn, .countdown-btn {
+            padding: 5px 12px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+        
+        .speed-btn:hover, .countdown-btn:hover {
+            border-color: #667eea;
+        }
+        
+        .speed-btn.active, .countdown-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #ccc;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .toggle-switch.active {
+            background: #4caf50;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: left 0.3s;
+        }
+        
+        .toggle-switch.active .toggle-slider {
+            left: 27px;
+        }
+        
+        .toggle-icon {
+            margin-left: 10px;
+            font-size: 1.1em;
+        }
+        
+        .right-panel {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+        
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+        
+        .status-item {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .status-item.music {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+        }
+        
+        .status-item.sheet {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+        }
+        
+        .status-item h3 {
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+        
+        .status-item .count {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        /* 검색 바 */
+        .search-bar {
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #f0f4ff;
+            border-radius: 10px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .artist-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .artist-row {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 10px;
+            align-items: flex-start;
+            transition: background 0.2s;
+        }
+        
+        .artist-row:hover {
+            background: #f9f9f9;
+        }
+        
+        .artist-name {
+            min-width: 150px;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+            padding-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .songs-container {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .song-item {
+            background: #667eea;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85em;
+            position: relative;
+        }
+        
+        .song-item:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .song-item .sheet-count {
+            font-size: 0.75em;
+            opacity: 0.8;
+            margin-left: 5px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+        
+        /* 팝업 스타일 */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+        }
+        
+        .popup-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+        
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .popup-title {
+            color: white;
+            font-size: 1.3em;
+        }
+        
+        .close-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+        
+        .close-btn:hover {
+            background: #ff3838;
+        }
+        
+        .player-section {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .countdown {
+            color: #ffd700;
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            min-height: 25px;
+        }
+        
+        audio {
+            width: 100%;
+            height: 40px;
+        }
+        
+        .speed-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .speed-controls button {
+            padding: 4px 10px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        
+        .speed-controls button:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .speed-controls button.active {
+            background: #667eea;
+            border-color: #667eea;
+        }
+        
+        .sheet-music-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            overflow: auto;
+        }
+        
+        .sheet-music-section img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .sheet-music-section.single img {
+            max-width: 90%;
+        }
+        
+        .sheet-music-section.multiple img {
+            max-width: 32%;
+        }
+        
+        .no-sheet {
+            color: #888;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        
+        .fullscreen-btn {
+            position: absolute;
+            top: 15px;
+            right: 80px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .fullscreen-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎸 기타 연습용 음악 플레이어</h1>
+        
+        <div class="top-section">
+            <div class="left-panel">
+                <div class="drop-zone" id="dropZone">
+                    <h2>📁 음악 & 악보 폴더를 여기에 드래그하세요</h2>
+                    <p>또는 클릭해서 폴더를 선택하세요</p>
+                    <input type="file" id="folderInput" webkitdirectory multiple style="display: none;">
+                </div>
+                
+                <div class="settings-panel">
+                    <div class="setting-row">
+                        <div class="setting-label">재생 속도</div>
+                        <div class="setting-control">
+                            <button class="speed-btn" data-speed="0.6">0.6x</button>
+                            <button class="speed-btn" data-speed="0.7">0.7x</button>
+                            <button class="speed-btn" data-speed="0.8">0.8x</button>
+                            <button class="speed-btn" data-speed="0.9">0.9x</button>
+                            <button class="speed-btn active" data-speed="1.0">1.0x</button>
+                            <button class="speed-btn" data-speed="1.1">1.1x</button>
+                            <button class="speed-btn" data-speed="1.2">1.2x</button>
+                            <button class="speed-btn" data-speed="1.3">1.3x</button>
+                            <button class="speed-btn" data-speed="1.4">1.4x</button>
+                            <button class="speed-btn" data-speed="1.5">1.5x</button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-row">
+                        <div class="setting-label">자동재생</div>
+                        <div class="setting-control">
+                            <button class="countdown-btn" data-countdown="1">1초</button>
+                            <button class="countdown-btn" data-countdown="2">2초</button>
+                            <button class="countdown-btn" data-countdown="3">3초</button>
+                            <button class="countdown-btn" data-countdown="4">4초</button>
+                            <button class="countdown-btn" data-countdown="5">5초</button>
+                            <button class="countdown-btn" data-countdown="6">6초</button>
+                            <button class="countdown-btn" data-countdown="7">7초</button>
+                            <button class="countdown-btn" data-countdown="8">8초</button>
+                            <button class="countdown-btn" data-countdown="9">9초</button>
+                            <button class="countdown-btn active" data-countdown="10">10초</button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-row">
+                        <div class="setting-label">연속 재생</div>
+                        <div class="setting-control">
+                            <div class="toggle-switch" id="loopToggle">
+                                <div class="toggle-slider"></div>
+                            </div>
+                            <span class="toggle-icon">🔁</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <button class="refresh-btn" onclick="resetAll()">🔄 리스트 새로고침</button>
+                <div class="status-item music">
+                    <h3>🎵 음악</h3>
+                    <div class="count" id="musicCount">0</div>
+                </div>
+                <div class="status-item sheet">
+                    <h3>📄 악보</h3>
+                    <div class="count" id="sheetCount">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="search-bar" id="searchBar" style="display: none;">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 가수 또는 곡명으로 검색하세요...">
+        </div>
+        
+        <div id="artistList" class="loading">
+            폴더를 드래그하거나 클릭해서 선택해주세요 🎵
+        </div>
+    </div>
+    
+    <div id="popup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <div class="popup-title" id="popupTitle"></div>
+                <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ 전체화면</button>
+                <button class="close-btn" onclick="closePopup()">✕</button>
+            </div>
+            
+            <div class="player-section">
+                <div class="countdown" id="countdown"></div>
+                <audio id="audioPlayer" controls></audio>
+                <div class="speed-controls" id="speedControls"></div>
+            </div>
+            
+            <div class="sheet-music-section" id="sheetMusicSection">
+                <div class="no-sheet">악보를 불러오는 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let musicFiles = [];
+        let sheetFiles = [];
+        let settings = {
+            playbackRate: 1.0,
+            countdownSeconds: 10,
+            loopEnabled: false
+        };
+        let popupPlaybackRate = 1.0; // 팝업 전용 속도
+        let currentSongIndex = -1;
+        let allSongs = [];
+
+        // 메인 설정 버튼 이벤트
+        document.querySelectorAll('.speed-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                settings.playbackRate = parseFloat(btn.dataset.speed);
+            });
+        });
+
+        document.querySelectorAll('.countdown-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.countdown-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                settings.countdownSeconds = parseInt(btn.dataset.countdown);
+            });
+        });
+
+        document.getElementById('loopToggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            settings.loopEnabled = this.classList.contains('active');
+        });
+
+        // 검색 기능
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            filterSongs(searchTerm);
+        });
+
+        function filterSongs(searchTerm) {
+            if (!searchTerm) {
+                renderMusicList();
+                return;
+            }
+
+            const artistMap = {};
+            
+            allSongs.forEach((songData, index) => {
+                const artistMatch = songData.parsed.artist.toLowerCase().includes(searchTerm);
+                const titleMatch = songData.parsed.title.toLowerCase().includes(searchTerm);
+                
+                if (artistMatch || titleMatch) {
+                    if (!artistMap[songData.parsed.artist]) {
+                        artistMap[songData.parsed.artist] = [];
+                    }
+                    artistMap[songData.parsed.artist].push({...songData, originalIndex: index});
+                }
+            });
+
+            const sortedArtists = Object.keys(artistMap).sort((a, b) => a.localeCompare(b, 'ko'));
+            
+            let html = '<div class="artist-list">';
+            if (sortedArtists.length === 0) {
+                html += '<div class="loading">검색 결과가 없습니다.</div>';
+            } else {
+                sortedArtists.forEach(artist => {
+                    html += '<div class="artist-row">';
+                    html += `<div class="artist-name">${artist}</div>`;
+                    html += '<div class="songs-container">';
+                    
+                    artistMap[artist].forEach((songData) => {
+                        const sheetCount = songData.sheets ? songData.sheets.length : 1;
+                        const sheetLabel = sheetCount > 1 ? ` (${sheetCount}장)` : '';
+                        html += `<div class="song-item" onclick="playSong(${songData.originalIndex})">${songData.parsed.title}${sheetLabel}</div>`;
+                    });
+                    
+                    html += '</div></div>';
+                });
+            }
+            html += '</div>';
+            
+            document.getElementById('artistList').innerHTML = html;
+        }
+
+        // 드래그앤드롭 설정
+        const dropZone = document.getElementById('dropZone');
+        const folderInput = document.getElementById('folderInput');
+
+        dropZone.addEventListener('click', () => {
+            folderInput.click();
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            
+            const items = e.dataTransfer.items;
+            processFiles(items);
+        });
+
+        folderInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            processFileList(files);
+        });
+
+        async function processFiles(items) {
+            const files = [];
+            
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (item.kind === 'file') {
+                    const entry = item.webkitGetAsEntry();
+                    if (entry) {
+                        await traverseFileTree(entry, files);
+                    }
+                }
+            }
+            
+            processFileList(files);
+        }
+
+        async function traverseFileTree(item, files, path = '') {
+            if (item.isFile) {
+                return new Promise((resolve) => {
+                    item.file((file) => {
+                        files.push(file);
+                        resolve();
+                    });
+                });
+            } else if (item.isDirectory) {
+                const dirReader = item.createReader();
+                return new Promise((resolve) => {
+                    dirReader.readEntries(async (entries) => {
+                        for (const entry of entries) {
+                            await traverseFileTree(entry, files, path + item.name + '/');
+                        }
+                        resolve();
+                    });
+                });
+            }
+        }
+
+        function processFileList(files) {
+            files.forEach(file => {
+                if (/\.(m4a|opus)$/i.test(file.name)) {
+                    if (!musicFiles.find(f => f.name === file.name)) {
+                        musicFiles.push(file);
+                    }
+                } else if (/\.png$/i.test(file.name)) {
+                    if (!sheetFiles.find(f => f.name === file.name)) {
+                        sheetFiles.push(file);
+                    }
+                }
+            });
+            
+            updateStatus();
+            renderMusicList();
+            document.getElementById('searchBar').style.display = 'block';
+        }
+
+        function updateStatus() {
+            document.getElementById('musicCount').textContent = musicFiles.length;
+            document.getElementById('sheetCount').textContent = sheetFiles.length;
+        }
+
+        function similarity(s1, s2) {
+            const longer = s1.length > s2.length ? s1 : s2;
+            const shorter = s1.length > s2.length ? s2 : s1;
+            
+            if (longer.length === 0) return 1.0;
+            
+            const editDistance = levenshteinDistance(longer, shorter);
+            return (longer.length - editDistance) / longer.length;
+        }
+
+        function levenshteinDistance(s1, s2) {
+            const costs = [];
+            for (let i = 0; i <= s1.length; i++) {
+                let lastValue = i;
+                for (let j = 0; j <= s2.length; j++) {
+                    if (i === 0) {
+                        costs[j] = j;
+                    } else if (j > 0) {
+                        let newValue = costs[j - 1];
+                        if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
+                            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                        }
+                        costs[j - 1] = lastValue;
+                        lastValue = newValue;
+                    }
+                }
+                if (i > 0) costs[s2.length] = lastValue;
+            }
+            return costs[s2.length];
+        }
+
+        function parseFileName(filename) {
+            const nameWithoutExt = filename.replace(/\.(m4a|opus|png)$/i, '');
+            const nameWithoutNumber = nameWithoutExt.replace(/\s*\d+\s*$/, '');
+            const parts = nameWithoutNumber.split('-');
+            
+            if (parts.length >= 2) {
+                return {
+                    artist: parts[0].trim(),
+                    title: parts.slice(1).join('-').trim(),
+                    full: nameWithoutNumber
+                };
+            }
+            return { artist: '알 수 없음', title: nameWithoutNumber, full: nameWithoutNumber };
+        }
+
+        function findMatchingMusic(sheetName) {
+            const sheetParsed = parseFileName(sheetName);
+            const matches = [];
+            
+            musicFiles.forEach(music => {
+                const musicParsed = parseFileName(music.name);
+                const sim = similarity(
+                    sheetParsed.full.toLowerCase(),
+                    musicParsed.full.toLowerCase()
+                );
+                
+                if (sim > 0.6) {
+                    matches.push({ file: music, similarity: sim });
+                }
+            });
+            
+            return matches.sort((a, b) => b.similarity - a.similarity)[0]?.file || null;
+        }
+
+        function findMatchingSheets(baseName) {
+            const baseParsed = parseFileName(baseName);
+            const matches = [];
+            
+            sheetFiles.forEach(sheet => {
+                const sheetParsed = parseFileName(sheet.name);
+                const sim = similarity(
+                    baseParsed.full.toLowerCase(),
+                    sheetParsed.full.toLowerCase()
+                );
+                
+                if (sim > 0.85) {
+                    matches.push({ file: sheet, similarity: sim });
+                }
+            });
+            
+            return matches
+                .sort((a, b) => b.similarity - a.similarity)
+                .map(m => m.file);
+        }
+
+        function renderMusicList() {
+            if (sheetFiles.length === 0) {
+                document.getElementById('artistList').innerHTML = '<div class="loading">악보 파일이 없습니다. 폴더를 다시 선택해주세요.</div>';
+                return;
+            }
+
+            const artistMap = {};
+            const processedSheets = new Set();
+            allSongs = [];
+            
+            sheetFiles.forEach(sheet => {
+                const parsed = parseFileName(sheet.name);
+                const baseKey = `${parsed.artist}-${parsed.title}`;
+                
+                if (processedSheets.has(baseKey)) {
+                    return;
+                }
+                
+                processedSheets.add(baseKey);
+                const allSheets = findMatchingSheets(sheet.name);
+                const musicFile = findMatchingMusic(sheet.name);
+                
+                if (!artistMap[parsed.artist]) {
+                    artistMap[parsed.artist] = [];
+                }
+                
+                const songData = { 
+                    sheet, 
+                    sheets: allSheets,
+                    parsed, 
+                    musicFile 
+                };
+                artistMap[parsed.artist].push(songData);
+                allSongs.push(songData);
+            });
+
+            const sortedArtists = Object.keys(artistMap).sort((a, b) => a.localeCompare(b, 'ko'));
+            
+            let html = '<div class="artist-list">';
+            sortedArtists.forEach(artist => {
+                html += '<div class="artist-row">';
+                html += `<div class="artist-name">${artist}</div>`;
+                html += '<div class="songs-container">';
+                
+                artistMap[artist].forEach((songData) => {
+                    const songIndex = allSongs.indexOf(songData);
+                    const sheetCount = songData.sheets.length;
+                    const sheetLabel = sheetCount > 1 ? ` (${sheetCount}장)` : '';
+                    html += `<div class="song-item" onclick="playSong(${songIndex})">${songData.parsed.title}${sheetLabel}</div>`;
+                });
+                
+                html += '</div></div>';
+            });
+            html += '</div>';
+            
+            document.getElementById('artistList').innerHTML = html;
+        }
+
+        let currentAudio = null;
+        let countdownTimer = null;
+
+        async function playSong(songIndex) {
+            currentSongIndex = songIndex;
+            const songData = allSongs[songIndex];
+            if (!songData) return;
+
+            const popup = document.getElementById('popup');
+            const audioPlayer = document.getElementById('audioPlayer');
+            
+            popupPlaybackRate = settings.playbackRate;
+            
+            document.getElementById('popupTitle').textContent = `${songData.parsed.artist} - ${songData.parsed.title}`;
+            document.getElementById('sheetMusicSection').innerHTML = '<div class="no-sheet">악보를 불러오는 중...</div>';
+            
+            popup.style.display = 'block';
+
+            createSpeedControls();
+
+            const sheetSection = document.getElementById('sheetMusicSection');
+            sheetSection.innerHTML = '';
+            
+            if (songData.sheets && songData.sheets.length > 0) {
+                sheetSection.className = songData.sheets.length === 1 ? 'sheet-music-section single' : 'sheet-music-section multiple';
+                
+                songData.sheets.forEach(sheet => {
+                    const url = URL.createObjectURL(sheet);
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = '악보';
+                    sheetSection.appendChild(img);
+                });
+            } else {
+                sheetSection.className = 'sheet-music-section single';
+                sheetSection.innerHTML = '<div class="no-sheet">악보가 없습니다</div>';
+            }
+
+            if (songData.musicFile) {
+                const url = URL.createObjectURL(songData.musicFile);
+                audioPlayer.src = url;
+                audioPlayer.playbackRate = popupPlaybackRate;
+                audioPlayer.style.display = 'block';
+                currentAudio = audioPlayer;
+
+                audioPlayer.onended = () => {
+                    if (settings.loopEnabled && currentSongIndex < allSongs.length - 1) {
+                        playSong(currentSongIndex + 1);
+                    }
+                };
+
+                let countdown = settings.countdownSeconds;
+                document.getElementById('countdown').textContent = `${countdown}초 후 자동 재생됩니다...`;
+                
+                countdownTimer = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        document.getElementById('countdown').textContent = `${countdown}초 후 자동 재생됩니다...`;
+                    } else {
+                        clearInterval(countdownTimer);
+                        document.getElementById('countdown').textContent = '';
+                        audioPlayer.play();
+                    }
+                }, 1000);
+            } else {
+                document.getElementById('countdown').textContent = '음악 파일이 없습니다';
+                audioPlayer.style.display = 'none';
+            }
+        }
+
+        function createSpeedControls() {
+            const speedControls = document.getElementById('speedControls');
+            const speeds = [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5];
+            
+            speedControls.innerHTML = speeds.map(speed => 
+                `<button onclick="changePopupSpeed(${speed})" class="${speed === popupPlaybackRate ? 'active' : ''}">${speed}x</button>`
+            ).join('');
+        }
+
+        function changePopupSpeed(speed) {
+            popupPlaybackRate = speed;
+            if (currentAudio) {
+                currentAudio.playbackRate = speed;
+            }
+            createSpeedControls();
+        }
+
+        function toggleFullscreen() {
+            const popup = document.getElementById('popup');
+            if (!document.fullscreenElement) {
+                popup.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function closePopup() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.src = '';
+            }
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+            }
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function resetAll() {
+            if (confirm('모든 음악과 악보 목록을 초기화하시겠습니까?')) {
+                musicFiles = [];
+                sheetFiles = [];
+                allSongs = [];
+                
+                document.getElementById('musicCount').textContent = '0';
+                document.getElementById('sheetCount').textContent = '0';
+                document.getElementById('artistList').innerHTML = '<div class="loading">폴더를 드래그하거나 클릭해서 선택해주세요 🎵</div>';
+                document.getElementById('searchBar').style.display = 'none';
+                document.getElementById('searchInput').value = '';
+                
+                folderInput.value = '';
+                
+                closePopup();
+            }
+        }
+    </script>
+</body>
+</html>
