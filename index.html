@@ -47,29 +47,21 @@
             gap: 15px;
         }
         
-        .drop-zone {
-            border: 3px dashed #667eea;
+        .status-box {
+            border: 3px solid #667eea;
             border-radius: 15px;
             padding: 30px;
-            text-align: left;
+            text-align: center;
             background: #f0f4ff;
-            transition: all 0.3s;
-            cursor: pointer;
         }
         
-        .drop-zone.drag-over {
-            background: #e0e8ff;
-            border-color: #764ba2;
-            transform: scale(1.02);
-        }
-        
-        .drop-zone h2 {
+        .status-box h2 {
             color: #667eea;
             margin-bottom: 10px;
             font-size: 1.3em;
         }
         
-        .drop-zone p {
+        .status-box p {
             color: #666;
             font-size: 0.95em;
         }
@@ -165,7 +157,7 @@
         }
         
         .refresh-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -174,16 +166,12 @@
             font-size: 1em;
             font-weight: bold;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         
         .refresh-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
-        
-        .refresh-btn:active {
-            transform: translateY(0);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
         
         .status-item {
@@ -212,7 +200,6 @@
             font-weight: bold;
         }
         
-        /* 검색 바 */
         .search-bar {
             margin-bottom: 20px;
             padding: 12px;
@@ -277,19 +264,12 @@
             cursor: pointer;
             transition: all 0.3s;
             font-size: 0.85em;
-            position: relative;
         }
         
         .song-item:hover {
             background: #764ba2;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .song-item .sheet-count {
-            font-size: 0.75em;
-            opacity: 0.8;
-            margin-left: 5px;
         }
         
         .loading {
@@ -299,7 +279,13 @@
             color: #667eea;
         }
         
-        /* 팝업 스타일 */
+        .error {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.1em;
+            color: #ff4757;
+        }
+        
         .popup-overlay {
             display: none;
             position: fixed;
@@ -449,10 +435,9 @@
         
         <div class="top-section">
             <div class="left-panel">
-                <div class="drop-zone" id="dropZone">
-                    <h2>📁 음악 & 악보 폴더를 여기에 드래그하세요</h2>
-                    <p>또는 클릭해서 폴더를 선택하세요</p>
-                    <input type="file" id="folderInput" webkitdirectory multiple style="display: none;">
+                <div class="status-box">
+                    <h2>📁 자동 로딩 중...</h2>
+                    <p id="statusText">파일 목록을 불러오는 중입니다</p>
                 </div>
                 
                 <div class="settings-panel">
@@ -501,7 +486,7 @@
             </div>
             
             <div class="right-panel">
-                <button class="refresh-btn" onclick="resetAll()">🔄 리스트 새로고침</button>
+                <button class="refresh-btn" onclick="loadFiles()">🔄 새로고침</button>
                 <div class="status-item music">
                     <h3>🎵 음악</h3>
                     <div class="count" id="musicCount">0</div>
@@ -518,7 +503,7 @@
         </div>
         
         <div id="artistList" class="loading">
-            폴더를 드래그하거나 클릭해서 선택해주세요 🎵
+            파일 목록을 불러오는 중... 🎵
         </div>
     </div>
     
@@ -550,11 +535,11 @@
             countdownSeconds: 10,
             loopEnabled: false
         };
-        let popupPlaybackRate = 1.0; // 팝업 전용 속도
+        let popupPlaybackRate = 1.0;
         let currentSongIndex = -1;
         let allSongs = [];
 
-        // 메인 설정 버튼 이벤트
+        // 설정 버튼 이벤트
         document.querySelectorAll('.speed-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
@@ -627,94 +612,61 @@
             document.getElementById('artistList').innerHTML = html;
         }
 
-        // 드래그앤드롭 설정
-        const dropZone = document.getElementById('dropZone');
-        const folderInput = document.getElementById('folderInput');
-
-        dropZone.addEventListener('click', () => {
-            folderInput.click();
-        });
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-over');
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('drag-over');
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-over');
+        // 파일 자동 로딩
+        async function loadFiles() {
+            document.getElementById('artistList').innerHTML = '<div class="loading">파일 목록을 불러오는 중... 🎵</div>';
+            document.getElementById('statusText').textContent = '파일 목록을 불러오는 중입니다';
             
-            const items = e.dataTransfer.items;
-            processFiles(items);
-        });
-
-        folderInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            processFileList(files);
-        });
-
-        async function processFiles(items) {
-            const files = [];
-            
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                if (item.kind === 'file') {
-                    const entry = item.webkitGetAsEntry();
-                    if (entry) {
-                        await traverseFileTree(entry, files);
-                    }
+            try {
+                const response = await fetch('filelist.json');
+                if (!response.ok) {
+                    throw new Error('filelist.json 파일을 찾을 수 없습니다');
                 }
-            }
-            
-            processFileList(files);
-        }
-
-        async function traverseFileTree(item, files, path = '') {
-            if (item.isFile) {
-                return new Promise((resolve) => {
-                    item.file((file) => {
-                        files.push(file);
-                        resolve();
-                    });
-                });
-            } else if (item.isDirectory) {
-                const dirReader = item.createReader();
-                return new Promise((resolve) => {
-                    dirReader.readEntries(async (entries) => {
-                        for (const entry of entries) {
-                            await traverseFileTree(entry, files, path + item.name + '/');
-                        }
-                        resolve();
-                    });
-                });
-            }
-        }
-
-        function processFileList(files) {
-            files.forEach(file => {
-                if (/\.(m4a|opus)$/i.test(file.name)) {
-                    if (!musicFiles.find(f => f.name === file.name)) {
-                        musicFiles.push(file);
-                    }
-                } else if (/\.png$/i.test(file.name)) {
-                    if (!sheetFiles.find(f => f.name === file.name)) {
-                        sheetFiles.push(file);
-                    }
+                
+                const filelist = await response.json();
+                musicFiles = filelist.music || [];
+                sheetFiles = filelist.sheets || [];
+                
+                if (musicFiles.length === 0 && sheetFiles.length === 0) {
+                    throw new Error('음악 파일과 악보 파일이 없습니다');
                 }
-            });
-            
-            updateStatus();
-            renderMusicList();
-            document.getElementById('searchBar').style.display = 'block';
+                
+                document.getElementById('statusText').textContent = `음악 ${musicFiles.length}개, 악보 ${sheetFiles.length}개 로드 완료!`;
+                updateStatus();
+                renderMusicList();
+                document.getElementById('searchBar').style.display = 'block';
+                
+            } catch (error) {
+                console.error('파일 로딩 오류:', error);
+                document.getElementById('artistList').innerHTML = `
+                    <div class="error">
+                        ❌ 파일을 불러올 수 없습니다<br>
+                        <small>${error.message}</small><br><br>
+                        <small>filelist.json 파일이 있는지 확인해주세요</small>
+                    </div>
+                `;
+                document.getElementById('statusText').textContent = '파일 로드 실패';
+            }
         }
 
         function updateStatus() {
             document.getElementById('musicCount').textContent = musicFiles.length;
             document.getElementById('sheetCount').textContent = sheetFiles.length;
+        }
+
+        function parseFileName(filename) {
+            const nameWithoutExt = filename.split('/').pop().replace(/\.(m4a|opus|png)$/i, '');
+            const nameWithoutNumber = nameWithoutExt.replace(/\s*\d+\s*$/, '');
+            const parts = nameWithoutNumber.split('-');
+            
+            if (parts.length >= 2) {
+                return {
+                    artist: parts[0].trim(),
+                    title: parts.slice(1).join('-').trim(),
+                    full: nameWithoutNumber
+                };
+            }
+            return { artist: '알 수 없음', title: nameWithoutNumber, full: nameWithoutNumber };
         }
 
         function similarity(s1, s2) {
@@ -748,64 +700,49 @@
             return costs[s2.length];
         }
 
-        function parseFileName(filename) {
-            const nameWithoutExt = filename.replace(/\.(m4a|opus|png)$/i, '');
-            const nameWithoutNumber = nameWithoutExt.replace(/\s*\d+\s*$/, '');
-            const parts = nameWithoutNumber.split('-');
-            
-            if (parts.length >= 2) {
-                return {
-                    artist: parts[0].trim(),
-                    title: parts.slice(1).join('-').trim(),
-                    full: nameWithoutNumber
-                };
-            }
-            return { artist: '알 수 없음', title: nameWithoutNumber, full: nameWithoutNumber };
-        }
-
         function findMatchingMusic(sheetName) {
             const sheetParsed = parseFileName(sheetName);
             const matches = [];
             
-            musicFiles.forEach(music => {
-                const musicParsed = parseFileName(music.name);
+            musicFiles.forEach(musicPath => {
+                const musicParsed = parseFileName(musicPath);
                 const sim = similarity(
                     sheetParsed.full.toLowerCase(),
                     musicParsed.full.toLowerCase()
                 );
                 
                 if (sim > 0.6) {
-                    matches.push({ file: music, similarity: sim });
+                    matches.push({ path: musicPath, similarity: sim });
                 }
             });
             
-            return matches.sort((a, b) => b.similarity - a.similarity)[0]?.file || null;
+            return matches.sort((a, b) => b.similarity - a.similarity)[0]?.path || null;
         }
 
         function findMatchingSheets(baseName) {
             const baseParsed = parseFileName(baseName);
             const matches = [];
             
-            sheetFiles.forEach(sheet => {
-                const sheetParsed = parseFileName(sheet.name);
+            sheetFiles.forEach(sheetPath => {
+                const sheetParsed = parseFileName(sheetPath);
                 const sim = similarity(
                     baseParsed.full.toLowerCase(),
                     sheetParsed.full.toLowerCase()
                 );
                 
                 if (sim > 0.85) {
-                    matches.push({ file: sheet, similarity: sim });
+                    matches.push({ path: sheetPath, similarity: sim });
                 }
             });
             
             return matches
                 .sort((a, b) => b.similarity - a.similarity)
-                .map(m => m.file);
+                .map(m => m.path);
         }
 
         function renderMusicList() {
             if (sheetFiles.length === 0) {
-                document.getElementById('artistList').innerHTML = '<div class="loading">악보 파일이 없습니다. 폴더를 다시 선택해주세요.</div>';
+                document.getElementById('artistList').innerHTML = '<div class="loading">악보 파일이 없습니다.</div>';
                 return;
             }
 
@@ -813,8 +750,8 @@
             const processedSheets = new Set();
             allSongs = [];
             
-            sheetFiles.forEach(sheet => {
-                const parsed = parseFileName(sheet.name);
+            sheetFiles.forEach(sheetPath => {
+                const parsed = parseFileName(sheetPath);
                 const baseKey = `${parsed.artist}-${parsed.title}`;
                 
                 if (processedSheets.has(baseKey)) {
@@ -822,18 +759,18 @@
                 }
                 
                 processedSheets.add(baseKey);
-                const allSheets = findMatchingSheets(sheet.name);
-                const musicFile = findMatchingMusic(sheet.name);
+                const allSheets = findMatchingSheets(sheetPath);
+                const musicPath = findMatchingMusic(sheetPath);
                 
                 if (!artistMap[parsed.artist]) {
                     artistMap[parsed.artist] = [];
                 }
                 
                 const songData = { 
-                    sheet, 
+                    sheetPath, 
                     sheets: allSheets,
                     parsed, 
-                    musicFile 
+                    musicPath 
                 };
                 artistMap[parsed.artist].push(songData);
                 allSongs.push(songData);
@@ -878,7 +815,6 @@
             document.getElementById('sheetMusicSection').innerHTML = '<div class="no-sheet">악보를 불러오는 중...</div>';
             
             popup.style.display = 'block';
-
             createSpeedControls();
 
             const sheetSection = document.getElementById('sheetMusicSection');
@@ -887,104 +823,7 @@
             if (songData.sheets && songData.sheets.length > 0) {
                 sheetSection.className = songData.sheets.length === 1 ? 'sheet-music-section single' : 'sheet-music-section multiple';
                 
-                songData.sheets.forEach(sheet => {
-                    const url = URL.createObjectURL(sheet);
+                songData.sheets.forEach(sheetPath => {
                     const img = document.createElement('img');
-                    img.src = url;
-                    img.alt = '악보';
-                    sheetSection.appendChild(img);
-                });
-            } else {
-                sheetSection.className = 'sheet-music-section single';
-                sheetSection.innerHTML = '<div class="no-sheet">악보가 없습니다</div>';
-            }
-
-            if (songData.musicFile) {
-                const url = URL.createObjectURL(songData.musicFile);
-                audioPlayer.src = url;
-                audioPlayer.playbackRate = popupPlaybackRate;
-                audioPlayer.style.display = 'block';
-                currentAudio = audioPlayer;
-
-                audioPlayer.onended = () => {
-                    if (settings.loopEnabled && currentSongIndex < allSongs.length - 1) {
-                        playSong(currentSongIndex + 1);
-                    }
-                };
-
-                let countdown = settings.countdownSeconds;
-                document.getElementById('countdown').textContent = `${countdown}초 후 자동 재생됩니다...`;
+                    img.src = sheetPath;
                 
-                countdownTimer = setInterval(() => {
-                    countdown--;
-                    if (countdown > 0) {
-                        document.getElementById('countdown').textContent = `${countdown}초 후 자동 재생됩니다...`;
-                    } else {
-                        clearInterval(countdownTimer);
-                        document.getElementById('countdown').textContent = '';
-                        audioPlayer.play();
-                    }
-                }, 1000);
-            } else {
-                document.getElementById('countdown').textContent = '음악 파일이 없습니다';
-                audioPlayer.style.display = 'none';
-            }
-        }
-
-        function createSpeedControls() {
-            const speedControls = document.getElementById('speedControls');
-            const speeds = [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5];
-            
-            speedControls.innerHTML = speeds.map(speed => 
-                `<button onclick="changePopupSpeed(${speed})" class="${speed === popupPlaybackRate ? 'active' : ''}">${speed}x</button>`
-            ).join('');
-        }
-
-        function changePopupSpeed(speed) {
-            popupPlaybackRate = speed;
-            if (currentAudio) {
-                currentAudio.playbackRate = speed;
-            }
-            createSpeedControls();
-        }
-
-        function toggleFullscreen() {
-            const popup = document.getElementById('popup');
-            if (!document.fullscreenElement) {
-                popup.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
-        }
-
-        function closePopup() {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.src = '';
-            }
-            if (countdownTimer) {
-                clearInterval(countdownTimer);
-            }
-            document.getElementById('popup').style.display = 'none';
-        }
-
-        function resetAll() {
-            if (confirm('모든 음악과 악보 목록을 초기화하시겠습니까?')) {
-                musicFiles = [];
-                sheetFiles = [];
-                allSongs = [];
-                
-                document.getElementById('musicCount').textContent = '0';
-                document.getElementById('sheetCount').textContent = '0';
-                document.getElementById('artistList').innerHTML = '<div class="loading">폴더를 드래그하거나 클릭해서 선택해주세요 🎵</div>';
-                document.getElementById('searchBar').style.display = 'none';
-                document.getElementById('searchInput').value = '';
-                
-                folderInput.value = '';
-                
-                closePopup();
-            }
-        }
-    </script>
-</body>
-</html>
