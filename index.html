@@ -784,7 +784,7 @@
         }
 
         function parseFileName(filename) {
-            const nameWithoutExt = filename.split('/').pop().replace(/\.(m4a|opus|png)$/i, '');
+            const nameWithoutExt = filename.split('/').pop().replace(/\.(m4a|opus|mp3|png)$/i, '');
             const nameWithoutNumber = nameWithoutExt.replace(/\s*\d+\s*$/, '');
             const parts = nameWithoutNumber.split('-');
             
@@ -971,13 +971,29 @@
                 audioPlayer.src = songData.musicPath;
                 audioPlayer.playbackRate = popupPlaybackRate;
                 audioPlayer.style.display = 'block';
+                audioPlayer.loop = false; // loop 속성 명시적으로 false 설정
                 currentAudio = audioPlayer;
 
-                audioPlayer.onended = () => {
-                    if (settings.loopEnabled && currentSongIndex < allSongs.length - 1) {
-                        playSong(currentSongIndex + 1);
+                // 기존 이벤트 리스너 제거
+                audioPlayer.onended = null;
+                
+                // 새 이벤트 리스너 추가
+                audioPlayer.addEventListener('ended', function handleEnded() {
+                    console.log('곡 종료, 이어듣기 설정:', settings.loopEnabled);
+                    
+                    if (settings.loopEnabled) {
+                        // 이어듣기가 켜져 있으면 다음 곡으로
+                        if (currentSongIndex < allSongs.length - 1) {
+                            playSong(currentSongIndex + 1);
+                        }
+                    } else {
+                        // 이어듣기가 꺼져 있으면 같은 곡 반복
+                        audioPlayer.currentTime = 0;
+                        audioPlayer.play().catch(err => {
+                            console.error('재생 오류:', err);
+                        });
                     }
-                };
+                });
 
                 let countdown = settings.countdownSeconds;
                 document.getElementById('countdown').textContent = `${countdown}초 후 자동 재생됩니다...`;
