@@ -422,19 +422,22 @@
         .sheet-music-section {
             flex: 1;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 5px;
-            overflow: auto;
-            padding-top: 10px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 15px;
         }
         
         .sheet-music-section img {
-            max-height: 100%;
+            width: 100%;
             max-width: 100%;
+            height: auto;
             object-fit: contain;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: block;
         }
         
         .sheet-music-section.single img {
@@ -544,12 +547,17 @@
             }
             
             .sheet-music-section.multiple {
-                flex-direction: row;
+                flex-direction: column;
             }
             
             .sheet-music-section.multiple img {
                 max-width: 32%;
                 margin-bottom: 0;
+                margin-right: 10px;
+            }
+            
+            .sheet-music-section.multiple img:last-child {
+                margin-right: 0;
             }
         }
     </style>
@@ -939,9 +947,14 @@
 
             const sheetSection = document.getElementById('sheetMusicSection');
             sheetSection.innerHTML = '';
+            sheetSection.className = 'sheet-music-section';
             
             if (songData.sheets && songData.sheets.length > 0) {
-                sheetSection.className = songData.sheets.length === 1 ? 'sheet-music-section single' : 'sheet-music-section multiple';
+                if (songData.sheets.length === 1) {
+                    sheetSection.classList.add('single');
+                } else {
+                    sheetSection.classList.add('multiple');
+                }
                 
                 songData.sheets.forEach(sheetPath => {
                     const img = document.createElement('img');
@@ -950,7 +963,6 @@
                     sheetSection.appendChild(img);
                 });
             } else {
-                sheetSection.className = 'sheet-music-section single';
                 sheetSection.innerHTML = '<div class="no-sheet">악보가 없습니다</div>';
             }
 
