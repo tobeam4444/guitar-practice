@@ -153,11 +153,6 @@
             left: 27px;
         }
         
-        .toggle-icon {
-            margin-left: 10px;
-            font-size: 1.1em;
-        }
-        
         .status-row {
             display: flex;
             gap: 10px;
@@ -209,6 +204,20 @@
         .status-item .count {
             font-size: 1.8em;
             font-weight: bold;
+        }
+        
+        .loop-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .loop-control .setting-label {
+            min-width: auto;
         }
         
         .search-bar {
@@ -364,6 +373,9 @@
             padding: 10px;
             border-radius: 10px;
             margin-bottom: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         
         .countdown {
@@ -411,9 +423,10 @@
             flex: 1;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             gap: 5px;
             overflow: auto;
+            padding-top: 10px;
         }
         
         .sheet-music-section img {
@@ -443,7 +456,6 @@
             text-align: center;
         }
         
-        /* 모바일 스타일 */
         @media (max-width: 767px) {
             .top-section {
                 flex-direction: column;
@@ -460,21 +472,15 @@
                 gap: 8px;
             }
             
-            .setting-label, .loop-label {
+            .setting-label {
                 min-width: auto;
             }
             
             .speed-btn, .countdown-btn {
                 min-width: 50px;
             }
-            
-            .loop-control {
-                flex-direction: row;
-                align-items: center;
-            }
         }
         
-        /* 데스크톱 스타일 */
         @media (min-width: 768px) {
             .container {
                 padding: 30px;
@@ -555,7 +561,7 @@
         <div class="top-section">
             <div class="left-panel">
                 <div class="status-box">
-                    <h2>📁 자동 로딩 중...</h2>
+                    <h2>📂 자동 로딩 중...</h2>
                     <p id="statusText">파일 목록을 불러오는 중입니다</p>
                 </div>
                 
@@ -607,7 +613,7 @@
                     </div>
                 </div>
                 <div class="loop-control">
-                    <div class="loop-label">연속 재생</div>
+                    <div class="setting-label">연속재생</div>
                     <div class="toggle-switch" id="loopToggle">
                         <div class="toggle-slider"></div>
                     </div>
