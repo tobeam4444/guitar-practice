@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -547,19 +548,38 @@
                 font-size: 1.3em;
             }
             
-            .sheet-music-section.multiple {
-                flex-direction: column;
-            }
-            
-            .sheet-music-section.multiple img {
-                max-width: 32%;
-                margin-bottom: 0;
-                margin-right: 10px;
-            }
-            
-            .sheet-music-section.multiple img:last-child {
-                margin-right: 0;
-            }
+/* 데스크톱/태블릿에서 악보 수평 정렬 및 높이 최적화 */
+.sheet-music-section {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.sheet-music-section img {
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: calc(100vh - 220px); /* 플레이어, 헤더, 여백 제외한 높이 */
+    object-fit: contain;
+}
+
+/* 악보 1장일 때 */
+.sheet-music-section.single img {
+    max-height: calc(100vh - 220px);
+}
+
+/* 악보 여러 장일 때 */
+.sheet-music-section.multiple {
+    flex-direction: row;
+    gap: 15px;
+}
+
+.sheet-music-section.multiple img {
+    max-height: calc(100vh - 220px);
+    flex: 0 1 auto;
+}
+
         }
     </style>
 </head>
