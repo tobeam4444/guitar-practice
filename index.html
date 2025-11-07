@@ -180,7 +180,7 @@
         }
         
         .status-item {
-            padding: 12px;
+            padding: 8px 12px;
             border-radius: 10px;
             text-align: center;
             flex: 1;
@@ -197,12 +197,12 @@
         }
         
         .status-item h3 {
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             font-size: 0.85em;
         }
         
         .status-item .count {
-            font-size: 1.8em;
+            font-size: 1.5em;
             font-weight: bold;
         }
         
@@ -373,7 +373,9 @@
             padding: 10px;
             border-radius: 10px;
             margin-bottom: 10px;
-            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         
         .countdown {
@@ -417,7 +419,6 @@
             border-color: #667eea;
         }
         
-        /* 모바일: 세로 배치 */
         .sheet-music-section {
             flex: 1;
             display: flex;
@@ -428,7 +429,6 @@
             overflow-y: auto;
             overflow-x: hidden;
             padding: 15px;
-            min-height: 0;
         }
         
         .sheet-music-section img {
@@ -439,6 +439,19 @@
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: block;
+        }
+        
+        .sheet-music-section.single img {
+            max-width: 95%;
+        }
+        
+        .sheet-music-section.multiple {
+            flex-direction: column;
+        }
+        
+        .sheet-music-section.multiple img {
+            max-width: 95%;
+            margin-bottom: 10px;
         }
         
         .no-sheet {
@@ -534,33 +547,18 @@
                 font-size: 1.3em;
             }
             
-            /* 데스크톱/태블릿: 가로 배치 및 높이 제한 */
-            .sheet-music-section {
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                gap: 15px;
-                padding: 20px;
+            .sheet-music-section.multiple {
+                flex-direction: column;
             }
             
-            .sheet-music-section img {
-                width: auto;
-                max-width: calc(33.333% - 10px);
-                height: auto;
-                max-height: calc(100vh - 200px); /* 플레이어와 여백을 제외한 높이 */
-                object-fit: contain;
+            .sheet-music-section.multiple img {
+                max-width: 32%;
+                margin-bottom: 0;
+                margin-right: 10px;
             }
             
-            /* 악보가 1장일 때 */
-            .sheet-music-section.single img {
-                max-width: 80%;
-                max-height: calc(100vh - 200px);
-            }
-            
-            /* 악보가 2장일 때 */
-            .sheet-music-section.double img {
-                max-width: calc(50% - 10px);
-                max-height: calc(100vh - 200px);
+            .sheet-music-section.multiple img:last-child {
+                margin-right: 0;
             }
         }
     </style>
@@ -624,7 +622,7 @@
                     </div>
                 </div>
                 <div class="loop-control">
-                    <div class="setting-label">연속재생</div>
+                    <div class="setting-label">곡 이어듣기</div>
                     <div class="toggle-switch" id="loopToggle">
                         <div class="toggle-slider"></div>
                     </div>
@@ -786,7 +784,7 @@
         }
 
         function parseFileName(filename) {
-            const nameWithoutExt = filename.split('/').pop().replace(/\.(m4a|opus|png)$/i, '');
+            const nameWithoutExt = filename.split('/').pop().replace(/\.(m4a|opus|mp3|png)$/i, '');
             const nameWithoutNumber = nameWithoutExt.replace(/\s*\d+\s*$/, '');
             const parts = nameWithoutNumber.split('-');
             
@@ -885,4 +883,187 @@
                 const parsed = parseFileName(sheetPath);
                 const baseKey = `${parsed.artist}-${parsed.title}`;
                 
-                if
+                if (processedSheets.has(baseKey)) {
+                    return;
+                }
+                
+                processedSheets.add(baseKey);
+                const allSheets = findMatchingSheets(sheetPath);
+                const musicPath = findMatchingMusic(sheetPath);
+                
+                if (!artistMap[parsed.artist]) {
+                    artistMap[parsed.artist] = [];
+                }
+                
+                const songData = { 
+                    sheetPath, 
+                    sheets: allSheets,
+                    parsed, 
+                    musicPath 
+                };
+                artistMap[parsed.artist].push(songData);
+                allSongs.push(songData);
+            });
+
+            const sortedArtists = Object.keys(artistMap).sort((a, b) => a.localeCompare(b, 'ko'));
+            
+            let html = '<div class="artist-list">';
+            sortedArtists.forEach(artist => {
+                html += '<div class="artist-row">';
+                html += `<div class="artist-name">${artist}</div>`;
+                html += '<div class="songs-container">';
+                
+                artistMap[artist].forEach((songData) => {
+                    const songIndex = allSongs.indexOf(songData);
+                    const sheetCount = songData.sheets.length;
+                    const sheetLabel = sheetCount > 1 ? ` (${sheetCount}장)` : '';
+                    html += `<div class="song-item" onclick="playSong(${songIndex})">${songData.parsed.title}${sheetLabel}</div>`;
+                });
+                
+                html += '</div></div>';
+            });
+            html += '</div>';
+            
+            document.getElementById('artistList').innerHTML = html;
+        }
+
+        let currentAudio = null;
+        let countdownTimer = null;
+
+        async function playSong(songIndex) {
+            currentSongIndex = songIndex;
+            const songData = allSongs[songIndex];
+            if (!songData) return;
+
+            const popup = document.getElementById('popup');
+            const audioPlayer = document.getElementById('audioPlayer');
+            
+            // 기존 카운트다운 타이머 정리
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+                countdownTimer = null;
+            }
+            
+            popupPlaybackRate = settings.playbackRate;
+            
+            document.getElementById('popupTitle').textContent = `${songData.parsed.artist} - ${songData.parsed.title}`;
+            document.getElementById('sheetMusicSection').innerHTML = '<div class="no-sheet">악보를 불러오는 중...</div>';
+            
+            popup.style.display = 'block';
+            createSpeedControls();
+
+            const sheetSection = document.getElementById('sheetMusicSection');
+            sheetSection.innerHTML = '';
+            sheetSection.className = 'sheet-music-section';
+            
+            if (songData.sheets && songData.sheets.length > 0) {
+                if (songData.sheets.length === 1) {
+                    sheetSection.classList.add('single');
+                } else {
+                    sheetSection.classList.add('multiple');
+                }
+                
+                songData.sheets.forEach(sheetPath => {
+                    const img = document.createElement('img');
+                    img.src = sheetPath;
+                    img.alt = '악보';
+                    sheetSection.appendChild(img);
+                });
+            } else {
+                sheetSection.innerHTML = '<div class="no-sheet">악보가 없습니다</div>';
+            }
+
+            if (songData.musicPath) {
+                audioPlayer.src = songData.musicPath;
+                audioPlayer.playbackRate = popupPlaybackRate;
+                audioPlayer.style.display = 'block';
+                audioPlayer.loop = false; // loop 속성 명시적으로 false 설정
+                currentAudio = audioPlayer;
+
+                // 기존 이벤트 리스너 제거
+                audioPlayer.onended = null;
+                
+                // 새 이벤트 리스너 추가
+                audioPlayer.addEventListener('ended', function handleEnded() {
+                    console.log('곡 종료, 이어듣기 설정:', settings.loopEnabled);
+                    
+                    // 카운트다운 타이머 정리
+                    if (countdownTimer) {
+                        clearInterval(countdownTimer);
+                        countdownTimer = null;
+                    }
+                    
+                    if (settings.loopEnabled) {
+                        // 이어듣기가 켜져 있으면 다음 곡으로
+                        if (currentSongIndex < allSongs.length - 1) {
+                            playSong(currentSongIndex + 1);
+                        }
+                    } else {
+                        // 이어듣기가 꺼져 있으면 같은 곡 반복
+                        audioPlayer.currentTime = 0;
+                        audioPlayer.play().catch(err => {
+                            console.error('재생 오류:', err);
+                        });
+                    }
+                });
+
+                let countdown = settings.countdownSeconds;
+                document.getElementById('countdown').textContent = `${countdown}초 후 자동 재생됩니다...`;
+                
+                countdownTimer = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        document.getElementById('countdown').textContent = `${countdown}초 후 자동 재생됩니다...`;
+                    } else {
+                        clearInterval(countdownTimer);
+                        document.getElementById('countdown').textContent = '';
+                        audioPlayer.play();
+                    }
+                }, 1000);
+            } else {
+                document.getElementById('countdown').textContent = '음악 파일이 없습니다';
+                audioPlayer.style.display = 'none';
+            }
+        }
+
+        function createSpeedControls() {
+            const speedControls = document.getElementById('speedControls');
+            const speeds = [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5];
+            
+            speedControls.innerHTML = speeds.map(speed => 
+                `<button onclick="changePopupSpeed(${speed})" class="${speed === popupPlaybackRate ? 'active' : ''}">${speed}x</button>`
+            ).join('');
+        }
+
+        function changePopupSpeed(speed) {
+            popupPlaybackRate = speed;
+            if (currentAudio) {
+                currentAudio.playbackRate = speed;
+            }
+            createSpeedControls();
+        }
+
+        function toggleFullscreen() {
+            const popup = document.getElementById('popup');
+            if (!document.fullscreenElement) {
+                popup.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function closePopup() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.src = '';
+            }
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+            }
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        window.addEventListener('load', loadFiles);
+    </script>
+</body>
+</html>
