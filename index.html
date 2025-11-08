@@ -45,24 +45,15 @@ h1 {
 .control-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 15px;
+    gap: 10px;
+    padding: 6px 10px;
     background: #f8f9fa;
     border-radius: 10px;
 }
-
+        
 .control-label {
-    min-width: 80px;
+    min-width: 70px;
     flex-shrink: 0;
-    font-weight: 600;
-    color: #667eea;
-    font-size: 0.9em;
-}
-
-.value-display {
-    min-width: 50px;
-    flex-shrink: 0;
-    text-align: right;
     font-weight: 600;
     color: #667eea;
     font-size: 0.9em;
@@ -562,8 +553,8 @@ h1 {
         <div class="controls-section">
  <div class="control-row">
     <div class="control-label">재생속도</div>
-<input type="range" id="speedSlider" min="0.5" max="1.5" step="0.1" value="1.0" class="slider"> 
-     <span id="speedValue" class="value-display">1.0x</span>
+    <input type="range" id="speedSlider" min="0.6" max="1.5" step="0.1" value="1.0" class="slider">
+    <span id="speedValue" class="value-display">1.0x</span>
 </div>
             
 <div class="control-row">
@@ -1189,8 +1180,8 @@ if (settings.loopEnabled && currentSongIndex < songList.length - 1) {
 function createSpeedControls() {
     const speedControls = document.getElementById('speedControls');
     
-speedControls.innerHTML = `
-    <input type="range" id="popupSpeedSlider" min="0.5" max="1.5" step="0.1" value="${popupPlaybackRate}" class="slider popup-slider">
+    speedControls.innerHTML = `
+        <input type="range" id="popupSpeedSlider" min="0.6" max="1.5" step="0.1" value="${popupPlaybackRate}" class="slider popup-slider">
         <span id="popupSpeedValue" class="value-display popup-value">${popupPlaybackRate.toFixed(1)}x</span>
     `;
     
