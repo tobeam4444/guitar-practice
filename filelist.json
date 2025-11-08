@@ -202,7 +202,7 @@
     "music/비비 - 아주, 천천히 (스물다섯 스물하나 OST)1.m4a",
     "music/빅마마 체념.opus",
     "music/빅마마 하루만 더.m4a",
-    "music/빅뱅 봄여름가을겨울.m4a",
+    "music/빅뱅 - 봄여름가을겨울 (Still Life)1.m4a",
     "music/빛과 소금 샴푸의 요정.m4a",
     "music/산들 취기를 빌려.m4a",
     "music/새소년 난춘.opus",
@@ -605,8 +605,6 @@
     "sheets/규현 - 광화문에서2.png",
     "sheets/규현 - 내 마음이 움찔했던 순간1.png",
     "sheets/규현 - 내 마음이 움찔했던 순간2.png",
-    "sheets/기다리다 - 윤하1.png",
-    "sheets/기다리다 - 윤하2.png",
     "sheets/기린(KIRIN) - 버스 안에서1.png",
     "sheets/기린(KIRIN) - 버스 안에서2.png",
     "sheets/길구봉구 - 이 별1.png",
@@ -693,8 +691,6 @@
     "sheets/닐로 - 지나오다2.png",
     "sheets/다비치 - 이 사랑 (태양의 후예 OST)1.png",
     "sheets/다비치 - 이 사랑 (태양의 후예 OST)2.png",
-    "sheets/다비치 - 이 사랑1.png",
-    "sheets/다비치 - 이 사랑2.png",
     "sheets/더 넛츠 - 사랑의 바보1.png",
     "sheets/더 넛츠 - 사랑의 바보2.png",
     "sheets/더 클래식 - 마법의 성1.png",
@@ -1064,6 +1060,8 @@
     "sheets/윤종신 - 오르막길1.png",
     "sheets/윤종신 - 오르막길2.png",
     "sheets/윤종신 - 좋니1.png",
+    "sheets/윤하 - 기다리다1.png",
+    "sheets/윤하 - 기다리다2.png",
     "sheets/윤하 - 사건의 지평선1.png",
     "sheets/윤하 - 사건의 지평선2.png",
     "sheets/윤하 - 사건의 지평선3.png",
@@ -3400,6 +3398,16 @@
       "similarity": 81.8
     },
     {
+      "artist": "빅뱅",
+      "title": "봄여름가을겨울 (Still Life)",
+      "music": "music/빅뱅 - 봄여름가을겨울 (Still Life)1.m4a",
+      "sheets": [
+        "sheets/빅뱅 - 봄여름가을겨울 (Still Life)1.png",
+        "sheets/빅뱅 - 봄여름가을겨울 (Still Life)2.png"
+      ],
+      "similarity": 96.2
+    },
+    {
       "artist": "빛과 소금",
       "title": "샴푸의 요정",
       "music": "music/빛과 소금 샴푸의 요정.m4a",
@@ -4494,6 +4502,16 @@
         "sheets/윤종신 - 좋니1.png"
       ],
       "similarity": 75.0
+    },
+    {
+      "artist": "윤하",
+      "title": "기다리다",
+      "music": "music/윤하 기다리다.m4a",
+      "sheets": [
+        "sheets/윤하 - 기다리다1.png",
+        "sheets/윤하 - 기다리다2.png"
+      ],
+      "similarity": 77.8
     },
     {
       "artist": "윤하",
@@ -6244,30 +6262,6 @@
     }
   ],
   "unmatched_sheets": [
-    {
-      "artist": "기다리다",
-      "title": "윤하",
-      "sheets": [
-        "sheets/기다리다 - 윤하1.png",
-        "sheets/기다리다 - 윤하2.png"
-      ]
-    },
-    {
-      "artist": "다비치",
-      "title": "이 사랑",
-      "sheets": [
-        "sheets/다비치 - 이 사랑1.png",
-        "sheets/다비치 - 이 사랑2.png"
-      ]
-    },
-    {
-      "artist": "빅뱅",
-      "title": "봄여름가을겨울 (Still Life)",
-      "sheets": [
-        "sheets/빅뱅 - 봄여름가을겨울 (Still Life)1.png",
-        "sheets/빅뱅 - 봄여름가을겨울 (Still Life)2.png"
-      ]
-    },
     {
       "artist": "휘인",
       "title": "너, 너 (N번째 연애 X 휘인)",
