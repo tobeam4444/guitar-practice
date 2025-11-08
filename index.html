@@ -551,11 +551,13 @@
 /* 데스크톱/태블릿에서 악보 수평 정렬 및 높이 최적화 */
 .sheet-music-section {
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 15px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 20px;
 }
-
 .sheet-music-section img {
     width: auto;
     max-width: none;
