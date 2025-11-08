@@ -1081,10 +1081,28 @@ function autoScroll() {
 }
                     }
                 }, 1000);
+} else {
+    // 음악 파일이 없을 때
+    audioPlayer.style.display = 'none';
+    
+    // 다음곡자동듣기가 켜져있으면 설정된 시간 후 다음 곡으로
+    if (settings.loopEnabled && currentSongIndex < allSongs.length - 1) {
+        let countdown = settings.countdownSeconds;
+        document.getElementById('countdown').textContent = `음악 파일이 없습니다 (${countdown}초 후 다음 곡)`;
+        
+        countdownTimer = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                document.getElementById('countdown').textContent = `음악 파일이 없습니다 (${countdown}초 후 다음 곡)`;
             } else {
-                document.getElementById('countdown').textContent = '음악 파일이 없습니다';
-                audioPlayer.style.display = 'none';
+                clearInterval(countdownTimer);
+                playSong(currentSongIndex + 1);
             }
+        }, 1000);
+    } else {
+        document.getElementById('countdown').textContent = '음악 파일이 없습니다';
+    }
+}
         }
 
         function createSpeedControls() {
