@@ -23,105 +23,120 @@
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
         h1 {
             text-align: center;
             color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 700;
         }
         
-        .top-section {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .left-panel {
-            flex: 1;
+        .controls-section {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         
-        .right-panel {
-            width: 280px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .status-box {
-            border: 3px solid #667eea;
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            background: #f0f4ff;
-        }
-        
-        .status-box h2 {
-            color: #667eea;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-        }
-        
-        .status-box p {
-            color: #666;
-            font-size: 0.85em;
-        }
-        
-        .settings-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .setting-row {
+        .control-row {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px;
+            gap: 8px;
+            padding: 8px 12px;
             background: #f8f9fa;
-            border-radius: 8px;
+            border-radius: 10px;
         }
         
-        .setting-label {
-            min-width: 80px;
+        .control-label {
+            min-width: 70px;
             font-weight: 600;
             color: #667eea;
-            font-size: 0.85em;
+            font-size: 0.9em;
         }
         
-        .setting-control {
+        .control-buttons {
             display: flex;
-            gap: 6px;
+            gap: 5px;
             flex-wrap: wrap;
-            align-items: center;
+            flex: 1;
         }
         
         .speed-btn, .countdown-btn {
-            padding: 5px 6px;
+            padding: 6px 10px;
             border: 2px solid #ddd;
             background: white;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.7em;
+            font-size: 0.75em;
             transition: all 0.2s;
-            flex: 1;
-            min-width: 38px;
+            font-weight: 500;
         }
         
         .speed-btn:hover, .countdown-btn:hover {
             border-color: #667eea;
+            transform: translateY(-1px);
         }
         
         .speed-btn.active, .countdown-btn.active {
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border-color: #667eea;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-box.music {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border: 2px solid #4caf50;
+        }
+        
+        .stat-box.sheet {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border: 2px solid #ff9800;
+        }
+        
+        .stat-box h3 {
+            margin-bottom: 4px;
+            font-size: 0.85em;
+            color: #555;
+        }
+        
+        .stat-box .count {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .toggle-label {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9em;
         }
         
         .toggle-switch {
@@ -135,7 +150,7 @@
         }
         
         .toggle-switch.active {
-            background: #4caf50;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
         }
         
         .toggle-slider {
@@ -147,83 +162,17 @@
             background: white;
             border-radius: 50%;
             transition: left 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         .toggle-switch.active .toggle-slider {
             left: 27px;
         }
         
-        .status-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .refresh-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        
-        .refresh-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-        
-        .status-item {
-            padding: 8px 12px;
-            border-radius: 10px;
-            text-align: center;
-            flex: 1;
-        }
-        
-        .status-item.music {
-            background: #e8f5e9;
-            border: 2px solid #4caf50;
-        }
-        
-        .status-item.sheet {
-            background: #fff3e0;
-            border: 2px solid #ff9800;
-        }
-        
-        .status-item h3 {
-            margin-bottom: 3px;
-            font-size: 0.85em;
-        }
-        
-        .status-item .count {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-        
-        .loop-control {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-        
-        .loop-control .setting-label {
-            min-width: auto;
-        }
-        
         .search-bar {
             margin-bottom: 15px;
             padding: 10px;
-            background: #f0f4ff;
+            background: linear-gradient(135deg, #f0f4ff, #e3eaff);
             border-radius: 10px;
         }
         
@@ -252,14 +201,15 @@
             display: flex;
             flex-direction: column;
             border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 10px;
+            border-radius: 10px;
+            padding: 12px;
             background: #fafafa;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
         
         .artist-row:hover {
             background: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .artist-name {
@@ -268,32 +218,32 @@
             font-size: 1em;
             margin-bottom: 8px;
             padding-bottom: 8px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 2px solid #e0e0e0;
         }
         
         .songs-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
         }
         
         .song-item {
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             padding: 8px 12px;
-            border-radius: 15px;
+            border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
             font-size: 0.85em;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
         }
         
         .song-item:hover {
-            background: #764ba2;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
         }
         
         .heart-btn {
@@ -302,7 +252,6 @@
             user-select: none;
             display: inline-block;
             transition: transform 0.2s;
-            padding: 0 2px;
         }
         
         .heart-btn:hover {
@@ -311,15 +260,16 @@
         
         .loading {
             text-align: center;
-            padding: 30px;
-            font-size: 1em;
+            padding: 40px;
+            font-size: 1.1em;
             color: #667eea;
+            font-weight: 500;
         }
         
         .error {
             text-align: center;
-            padding: 30px;
-            font-size: 0.95em;
+            padding: 40px;
+            font-size: 1em;
             color: #ff4757;
         }
         
@@ -339,7 +289,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            padding: 2px;
+            padding: 10px;
         }
         
         .popup-header {
@@ -364,11 +314,12 @@
             color: white;
             border: none;
             padding: 8px 12px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.85em;
-            transition: background 0.3s;
+            transition: all 0.3s;
             white-space: nowrap;
+            font-weight: 600;
         }
         
         .fullscreen-btn {
@@ -378,6 +329,7 @@
         
         .close-btn:hover {
             background: #ff3838;
+            transform: scale(1.05);
         }
         
         .fullscreen-btn:hover {
@@ -386,20 +338,19 @@
         
         .player-section {
             background: rgba(255,255,255,0.1);
-            padding: 5px;
+            padding: 10px;
             border-radius: 10px;
-            margin-bottom: 5px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            margin-bottom: 10px;
+            flex-shrink: 0;
         }
         
         .countdown {
             color: #ffd700;
             text-align: center;
-            font-size: 0.85em;
-            margin-bottom: 4px;
-            min-height: 12px;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            min-height: 20px;
+            font-weight: 500;
         }
         
         audio {
@@ -412,29 +363,29 @@
             justify-content: center;
             gap: 5px;
             margin-top: 8px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
+            flex-wrap: wrap;
         }
         
         .speed-controls button {
-            padding: 6px 10px;
+            padding: 8px 12px;
             border: 1px solid rgba(255,255,255,0.3);
             background: rgba(255,255,255,0.1);
             color: white;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.8em;
+            font-size: 0.85em;
             transition: all 0.2s;
             white-space: nowrap;
-            flex-shrink: 0;
+            font-weight: 500;
         }
         
         .speed-controls button:hover {
             background: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
         }
         
         .speed-controls button.active {
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-color: #667eea;
         }
         
@@ -447,7 +398,7 @@
             gap: 10px;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 3px;
+            padding: 10px;
         }
         
         .sheet-music-section img {
@@ -460,19 +411,6 @@
             display: block;
         }
         
-        .sheet-music-section.single img {
-            max-width: 95%;
-        }
-        
-        .sheet-music-section.multiple {
-            flex-direction: column;
-        }
-        
-        .sheet-music-section.multiple img {
-            max-width: 95%;
-            margin-bottom: 10px;
-        }
-        
         .no-sheet {
             color: #888;
             font-size: 1em;
@@ -480,27 +418,13 @@
         }
         
         @media (max-width: 767px) {
-            .top-section {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .right-panel {
-                width: 100%;
-            }
-            
-            .setting-row {
+            .control-row {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 8px;
             }
             
-            .setting-label {
+            .control-label {
                 min-width: auto;
-            }
-            
-            .speed-btn, .countdown-btn {
-                min-width: 50px;
             }
         }
         
@@ -510,38 +434,22 @@
             }
             
             h1 {
-                font-size: 2em;
-                margin-bottom: 20px;
+                font-size: 2.2em;
+                margin-bottom: 25px;
             }
             
-            .top-section {
-                flex-direction: row;
-                gap: 20px;
-                margin-bottom: 30px;
-            }
-            
-            .left-panel {
-                flex: 1;
-            }
-            
-            .right-panel {
-                width: 250px;
-            }
-            
-            .setting-row {
-                flex-direction: row;
-                align-items: center;
+            .controls-section {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
                 gap: 15px;
-                padding: 12px;
             }
             
-            .setting-label {
-                min-width: 80px;
+            .stats-row {
+                grid-column: 1 / -1;
             }
             
-            .speed-btn, .countdown-btn {
-                flex: 0;
-                min-width: 40px;
+            .toggle-row {
+                margin-bottom: 0;
             }
             
             .artist-row {
@@ -555,7 +463,7 @@
                 margin-bottom: 0;
                 padding-bottom: 0;
                 border-bottom: none;
-                border-right: 1px solid #e0e0e0;
+                border-right: 2px solid #e0e0e0;
             }
             
             .songs-container {
@@ -563,9 +471,9 @@
             }
             
             .popup-title {
-                font-size: 1.3em;
+                font-size: 1.4em;
             }
-
+            
             .speed-controls button {
                 padding: 10px 16px;
                 font-size: 1em;
@@ -573,7 +481,7 @@
             
             .sheet-music-section {
                 flex-direction: row;
-                justify-content: safe center;
+                justify-content: center;
                 align-items: center;
                 gap: 15px;
                 overflow-x: auto;
@@ -585,22 +493,8 @@
                 width: auto;
                 max-width: 95vw;
                 height: auto;
-                max-height: calc(100vh - 220px);
+                max-height: calc(100vh - 200px);
                 object-fit: contain;
-            }
-
-            .sheet-music-section.single img {
-                max-height: calc(100vh - 220px);
-            }
-
-            .sheet-music-section.multiple {
-                flex-direction: row;
-                gap: 15px;
-            }
-
-            .sheet-music-section.multiple img {
-                max-height: calc(100vh - 220px);
-                flex: 0 1 auto;
             }
         }
     </style>
@@ -609,77 +503,68 @@
     <div class="container">
         <h1>🎸 기타 연습용 음악 플레이어</h1>
         
-        <div class="top-section">
-            <div class="left-panel">
-                <div class="status-box">
-                    <h2>📂 자동 로딩 중...</h2>
-                    <p id="statusText">파일 목록을 불러오는 중입니다</p>
-                </div>
-                
-                <div class="settings-panel">
-                    <div class="setting-row">
-                        <div class="setting-label">재생 속도</div>
-                        <div class="setting-control">
-                            <button class="speed-btn" data-speed="0.6">0.6x</button>
-                            <button class="speed-btn" data-speed="0.7">0.7x</button>
-                            <button class="speed-btn" data-speed="0.8">0.8x</button>
-                            <button class="speed-btn" data-speed="0.9">0.9x</button>
-                            <button class="speed-btn active" data-speed="1.0">1.0x</button>
-                            <button class="speed-btn" data-speed="1.1">1.1x</button>
-                            <button class="speed-btn" data-speed="1.2">1.2x</button>
-                            <button class="speed-btn" data-speed="1.3">1.3x</button>
-                            <button class="speed-btn" data-speed="1.4">1.4x</button>
-                            <button class="speed-btn" data-speed="1.5">1.5x</button>
-                        </div>
-                    </div>
-                    
-                    <div class="setting-row">
-                        <div class="setting-label">자동재생</div>
-                        <div class="setting-control">
-                            <button class="countdown-btn" data-countdown="1">1초</button>
-                            <button class="countdown-btn" data-countdown="2">2초</button>
-                            <button class="countdown-btn" data-countdown="3">3초</button>
-                            <button class="countdown-btn" data-countdown="4">4초</button>
-                            <button class="countdown-btn" data-countdown="5">5초</button>
-                            <button class="countdown-btn" data-countdown="6">6초</button>
-                            <button class="countdown-btn" data-countdown="7">7초</button>
-                            <button class="countdown-btn" data-countdown="8">8초</button>
-                            <button class="countdown-btn" data-countdown="9">9초</button>
-                            <button class="countdown-btn active" data-countdown="10">10초</button>
-                        </div>
-                    </div>
+        <div class="controls-section">
+            <div class="control-row">
+                <div class="control-label">재생 속도</div>
+                <div class="control-buttons">
+                    <button class="speed-btn" data-speed="0.6">0.6x</button>
+                    <button class="speed-btn" data-speed="0.7">0.7x</button>
+                    <button class="speed-btn" data-speed="0.8">0.8x</button>
+                    <button class="speed-btn" data-speed="0.9">0.9x</button>
+                    <button class="speed-btn active" data-speed="1.0">1.0x</button>
+                    <button class="speed-btn" data-speed="1.1">1.1x</button>
+                    <button class="speed-btn" data-speed="1.2">1.2x</button>
+                    <button class="speed-btn" data-speed="1.3">1.3x</button>
+                    <button class="speed-btn" data-speed="1.4">1.4x</button>
+                    <button class="speed-btn" data-speed="1.5">1.5x</button>
                 </div>
             </div>
             
-            <div class="right-panel">
-                <button class="refresh-btn" onclick="loadFiles()">🔄 새로고침</button>
-                <div class="status-row">
-                    <div class="status-item music">
-                        <h3>🎵 음악</h3>
-                        <div class="count" id="musicCount">0</div>
-                    </div>
-                    <div class="status-item sheet">
-                        <h3>📄 악보</h3>
-                        <div class="count" id="sheetCount">0</div>
-                    </div>
+            <div class="control-row">
+                <div class="control-label">자동재생</div>
+                <div class="control-buttons">
+                    <button class="countdown-btn" data-countdown="1">1초</button>
+                    <button class="countdown-btn" data-countdown="2">2초</button>
+                    <button class="countdown-btn" data-countdown="3">3초</button>
+                    <button class="countdown-btn" data-countdown="4">4초</button>
+                    <button class="countdown-btn" data-countdown="5">5초</button>
+                    <button class="countdown-btn" data-countdown="6">6초</button>
+                    <button class="countdown-btn" data-countdown="7">7초</button>
+                    <button class="countdown-btn" data-countdown="8">8초</button>
+                    <button class="countdown-btn" data-countdown="9">9초</button>
+                    <button class="countdown-btn active" data-countdown="10">10초</button>
                 </div>
-                <div class="loop-control">
-                   <div class="setting-label">다음곡자동듣기</div>
-                    <div class="toggle-switch" id="loopToggle">
-                        <div class="toggle-slider"></div>
-                    </div>
+            </div>
+            
+            <div class="stats-row">
+                <div class="stat-box music">
+                    <h3>🎵 음악</h3>
+                    <div class="count" id="musicCount">0</div>
                 </div>
-                <div class="loop-control">
-                    <div class="setting-label">자동스크롤</div>
-                    <div class="toggle-switch active" id="autoScrollToggle">
-                        <div class="toggle-slider"></div>
-                    </div>
+                <div class="stat-box sheet">
+                    <h3>📄 악보</h3>
+                    <div class="count" id="sheetCount">0</div>
                 </div>
-                <div class="loop-control">
-                    <div class="setting-label">💖 찜한곡만보기</div>
-                    <div class="toggle-switch" id="favoriteToggle">
-                        <div class="toggle-slider"></div>
-                    </div>
+            </div>
+            
+            <div class="toggle-row">
+                <div class="toggle-label">다음곡자동듣기</div>
+                <div class="toggle-switch" id="loopToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            
+            <div class="toggle-row">
+                <div class="toggle-label">자동스크롤</div>
+                <div class="toggle-switch active" id="autoScrollToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            
+            <div class="toggle-row">
+                <div class="toggle-label">💖 찜한곡만보기</div>
+                <div class="toggle-switch" id="favoriteToggle">
+                    <div class="toggle-slider"></div>
                 </div>
             </div>
         </div>
@@ -909,13 +794,17 @@
                     html += '<div class="songs-container">';
                     
                     artistMap[artist].forEach((songData) => {
-    const sheetCount = songData.sheets ? songData.sheets.length : 1;
-    const sheetLabel = sheetCount > 1 ? ` (${sheetCount}장)` : '';
-    const noMusicLabel = !songData.musicPath ? '⛔ ' : '';  // 앞에 붙이기
-    const songIndex = filteredSongs.indexOf(songData);
-const heartIcon = isFavorite(songData) ? '❤️' : '🤍';
-html += `<div class="song-item" onclick="playSong(${songIndex})">${noMusicLabel}${songData.parsed.title}${sheetLabel}<span class="heart-btn" onclick="toggleFavorite(${songIndex}, event)">${heartIcon}</span></div>`;
-});
+                        const sheetCount = songData.sheets ? songData.sheets.length : 1;
+                        const sheetLabel = sheetCount > 1 ? ` (${sheetCount}장)` : '';
+                        const noMusicLabel = !songData.musicPath ? '⛔ ' : '';
+                        const songIndex = filteredSongs.indexOf(songData);
+                        const heartIcon = isFavorite(songData) ? '❤️' : '🤍';
+                        
+                        html += `<div class="song-item" onclick="playSong(${songIndex})">
+                            <span>${noMusicLabel}${songData.parsed.title}${sheetLabel}</span>
+                            <span class="heart-btn" onclick="toggleFavorite(${songIndex}, event)">${heartIcon}</span>
+                        </div>`;
+                    });
                     
                     html += '</div></div>';
                 });
@@ -927,7 +816,6 @@ html += `<div class="song-item" onclick="playSong(${songIndex})">${noMusicLabel}
 
         async function loadFiles() {
             document.getElementById('artistList').innerHTML = '<div class="loading">파일 목록을 불러오는 중... 🎵</div>';
-            document.getElementById('statusText').textContent = '파일 목록을 불러오는 중입니다';
             
             try {
                 const response = await fetch('filelist.json');
@@ -943,7 +831,6 @@ html += `<div class="song-item" onclick="playSong(${songIndex})">${noMusicLabel}
                     throw new Error('음악 파일과 악보 파일이 없습니다');
                 }
                 
-                document.getElementById('statusText').textContent = `음악 ${musicFiles.length}개, 악보 ${sheetFiles.length}개 로드 완료!`;
                 updateStatus();
                 renderMusicList();
                 document.getElementById('searchBar').style.display = 'block';
@@ -957,7 +844,6 @@ html += `<div class="song-item" onclick="playSong(${songIndex})">${noMusicLabel}
                         <small>filelist.json 파일이 있는지 확인해주세요</small>
                     </div>
                 `;
-                document.getElementById('statusText').textContent = '파일 로드 실패';
             }
         }
 
