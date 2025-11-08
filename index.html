@@ -768,11 +768,12 @@ let settings = {
                     html += `<div class="artist-name">${artist}</div>`;
                     html += '<div class="songs-container">';
                     
-                    artistMap[artist].forEach((songData) => {
-                        const sheetCount = songData.sheets ? songData.sheets.length : 1;
-                        const sheetLabel = sheetCount > 1 ? ` (${sheetCount}장)` : '';
-                        html += `<div class="song-item" onclick="playSong(${songData.originalIndex})">${songData.parsed.title}${sheetLabel}</div>`;
-                    });
+artistMap[artist].forEach((songData) => {
+    const sheetCount = songData.sheets ? songData.sheets.length : 1;
+    const sheetLabel = sheetCount > 1 ? ` (${sheetCount}장)` : '';
+    const noMusicLabel = !songData.musicPath ? '⛔ ' : '';  // 앞에 붙이기
+    html += `<div class="song-item" onclick="playSong(${songData.originalIndex})">${noMusicLabel}${songData.parsed.title}${sheetLabel}</div>`;
+});
                     
                     html += '</div></div>';
                 });
@@ -953,12 +954,13 @@ let settings = {
                 html += `<div class="artist-name">${artist}</div>`;
                 html += '<div class="songs-container">';
                 
-                artistMap[artist].forEach((songData) => {
-                    const songIndex = allSongs.indexOf(songData);
-                    const sheetCount = songData.sheets.length;
-                    const sheetLabel = sheetCount > 1 ? ` (${sheetCount}장)` : '';
-                    html += `<div class="song-item" onclick="playSong(${songIndex})">${songData.parsed.title}${sheetLabel}</div>`;
-                });
+artistMap[artist].forEach((songData) => {
+    const songIndex = allSongs.indexOf(songData);
+    const sheetCount = songData.sheets.length;
+    const sheetLabel = sheetCount > 1 ? ` (${sheetCount}장)` : '';
+    const noMusicLabel = !songData.musicPath ? '⛔ ' : '';  // 앞에 붙이기
+    html += `<div class="song-item" onclick="playSong(${songIndex})">${noMusicLabel}${songData.parsed.title}${sheetLabel}</div>`;
+});
                 
                 html += '</div></div>';
             });
