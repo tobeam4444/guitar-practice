@@ -1064,11 +1064,17 @@ audioPlayer.removeEventListener('timeupdate', autoScroll);
 audioPlayer.addEventListener('timeupdate', autoScroll);
 
 function autoScroll() {
-    if (window.innerWidth < 768 && settings.autoScrollEnabled) { // 조건 추가
-        const progress = audioPlayer.currentTime / audioPlayer.duration;
-        const sheetSection = document.getElementById('sheetMusicSection');
-        const maxScroll = sheetSection.scrollHeight - sheetSection.clientHeight;
-        sheetSection.scrollTop = maxScroll * progress;
+    if (window.innerWidth < 768 && settings.autoScrollEnabled) {
+        const currentTime = audioPlayer.currentTime;
+        const duration = audioPlayer.duration;
+        
+        // 60초 이후부터만 스크롤
+        if (currentTime > 60) {
+            const adjustedProgress = (currentTime - 60) / (duration - 60);
+            const sheetSection = document.getElementById('sheetMusicSection');
+            const maxScroll = sheetSection.scrollHeight - sheetSection.clientHeight;
+            sheetSection.scrollTop = maxScroll * adjustedProgress;
+        }
     }
 }
                     }
