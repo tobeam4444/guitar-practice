@@ -392,24 +392,27 @@
             height: 40px;
         }
         
-        .speed-controls {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
+.speed-controls {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 8px;
+    flex-wrap: nowrap;     /* wrap에서 변경 - 줄바꿈 방지 */
+    overflow-x: auto;      /* 추가 - 넘치면 가로 스크롤 */
+}
         
-        .speed-controls button {
-            padding: 6px 10px;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: all 0.2s;
-        }
+.speed-controls button {
+    padding: 6px 10px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: all 0.2s;
+    white-space: nowrap;    /* 추가 - 버튼 텍스트 줄바꿈 방지 */
+    flex-shrink: 0;         /* 추가 - 버튼 크기 유지 */
+}
         
         .speed-controls button:hover {
             background: rgba(255,255,255,0.2);
