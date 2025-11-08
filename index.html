@@ -943,8 +943,18 @@ artistMap[artist].forEach((songData) => {
                     musicPath 
                 };
                 artistMap[parsed.artist].push(songData);
-                allSongs.push(songData);
             });
+
+            // 정렬된 순서대로 allSongs에 추가
+allSongs = [];  // 초기화
+const sortedArtists = Object.keys(artistMap).sort((a, b) => a.localeCompare(b, 'ko'));
+
+// 이 부분 추가 (HTML 만들기 전에)
+sortedArtists.forEach(artist => {
+    artistMap[artist].forEach(songData => {
+        allSongs.push(songData);  // 정렬된 순서대로 추가
+    });
+});
 
             const sortedArtists = Object.keys(artistMap).sort((a, b) => a.localeCompare(b, 'ko'));
             
