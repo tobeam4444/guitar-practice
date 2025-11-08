@@ -1072,16 +1072,21 @@
             }
         }
 
-        function closePopup() {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.src = '';
-            }
-            if (countdownTimer) {
-                clearInterval(countdownTimer);
-            }
-            document.getElementById('popup').style.display = 'none';
-        }
+       function closePopup() {
+    // 전체화면 모드인 경우 먼저 전체화면 종료
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    }
+    
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.src = '';
+    }
+    if (countdownTimer) {
+        clearInterval(countdownTimer);
+    }
+    document.getElementById('popup').style.display = 'none';
+}
 
         window.addEventListener('load', loadFiles);
     </script>
