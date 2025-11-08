@@ -951,11 +951,15 @@ const sortedArtists = Object.keys(artistMap).sort((a, b) => a.localeCompare(b, '
 
 // 이 부분 추가 (HTML 만들기 전에)
 sortedArtists.forEach(artist => {
-    artistMap[artist].forEach(songData => {
-        allSongs.push(songData);  // 정렬된 순서대로 추가
+    // 같은 아티스트 내 곡들도 제목순 정렬
+    const sortedSongs = artistMap[artist].sort((a, b) => 
+        a.parsed.title.localeCompare(b.parsed.title, 'ko')
+    );
+    
+    sortedSongs.forEach(songData => {
+        allSongs.push(songData);
     });
-});
-            
+});      
             let html = '<div class="artist-list">';
             sortedArtists.forEach(artist => {
                 html += '<div class="artist-row">';
