@@ -1,3 +1,6 @@
+permissions:
+  contents: write
+
 name: Generate File List
 
 # music 또는 sheets 폴더에 변경사항이 있을 때 자동 실행
