@@ -1063,21 +1063,24 @@ audioPlayer.addEventListener('ended', function handleEnded() {
         countdownTimer = null;
     }
     
-    if (settings.loopEnabled) {
-        const songList = isSearchMode ? filteredSongs : allSongs;
-        if (currentSongIndex < songList.length - 1) {
-            playSong(currentSongIndex + 1);
-        }
+if (settings.loopEnabled) {
+    const songList = isSearchMode ? filteredSongs : allSongs;
+    if (currentSongIndex < songList.length - 1) {
+        // 다음 곡으로
+        playSong(currentSongIndex + 1);
     } else {
-        // 이어듣기가 꺼져 있으면 같은 곡 반복
-        const sheetSection = document.getElementById('sheetMusicSection');
-        sheetSection.scrollTop = 0;
-        audioPlayer.currentTime = 0;
-        audioPlayer.play().catch(err => {
-            console.error('재생 오류:', err);
-        });
+        // 마지막 곡이면 첫 곡으로 (검색 결과든 전체 목록이든 해당 리스트의 첫 곡)
+        playSong(0);
     }
-});
+} else {
+    // 이어듣기가 꺼져 있으면 같은 곡 반복
+    const sheetSection = document.getElementById('sheetMusicSection');
+    sheetSection.scrollTop = 0;
+    audioPlayer.currentTime = 0;
+    audioPlayer.play().catch(err => {
+        console.error('재생 오류:', err);
+    });
+}
 
                 let countdown = settings.countdownSeconds;
                 document.getElementById('countdown').textContent = `${countdown}초 후 자동 재생됩니다...`;
