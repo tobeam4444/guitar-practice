@@ -319,13 +319,13 @@
             z-index: 1000;
         }
         
-        .popup-content {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-        }
+.popup-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 2px;    /* 10px에서 80% 축소 */
+}
         
         .popup-header {
             display: flex;
@@ -371,9 +371,9 @@
         
 .player-section {
     background: rgba(255,255,255,0.1);
-    padding: 8px;         /* 10px에서 변경 */
+    padding: 5px;         /* 8px에서 더 축소 */
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;   /* 10px에서 50% 축소 */
     position: sticky;
     top: 0;
     z-index: 10;
@@ -423,17 +423,17 @@
             border-color: #667eea;
         }
         
-        .sheet-music-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 10px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 15px;
-        }
+.sheet-music-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 3px;    /* 15px에서 80% 축소 */
+}
         
         .sheet-music-section img {
             width: 100%;
