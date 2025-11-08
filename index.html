@@ -551,7 +551,7 @@
 /* 데스크톱/태블릿에서 악보 수평 정렬 및 높이 최적화 */
 .sheet-music-section {
     flex-direction: row;
-    justify-content: center;
+    justify-content: safe center;  /* center에서 변경 */
     align-items: center;
     gap: 15px;
     overflow-x: auto;
@@ -560,9 +560,9 @@
 }
 .sheet-music-section img {
     width: auto;
-    max-width: none;
+    max-width: 95vw;  /* none에서 변경 */
     height: auto;
-    max-height: calc(100vh - 220px); /* 플레이어, 헤더, 여백 제외한 높이 */
+    max-height: calc(100vh - 220px);
     object-fit: contain;
 }
 
