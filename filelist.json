@@ -567,9 +567,7 @@
     "sheets/거북이 - 비행기1.png",
     "sheets/거북이 - 비행기2.png",
     "sheets/거북이 - 비행기3.png",
-    "sheets/검정치마 - Antifreeze1 (2).png",
     "sheets/검정치마 - Antifreeze1.png",
-    "sheets/검정치마 - Antifreeze2 (2).png",
     "sheets/검정치마 - Antifreeze2.png",
     "sheets/겨울왕국 OST - Let it go1.png",
     "sheets/겨울왕국 OST - Let it go2.png",
@@ -1809,24 +1807,6 @@
         "sheets/검정치마 - Antifreeze2.png"
       ],
       "similarity": 88.2
-    },
-    {
-      "artist": "검정치마",
-      "title": "Antifreeze1 (2)",
-      "music": "music/검정치마 Antifreeze.m4a",
-      "sheets": [
-        "sheets/검정치마 - Antifreeze1 (2).png"
-      ],
-      "similarity": 68.2
-    },
-    {
-      "artist": "검정치마",
-      "title": "Antifreeze2 (2)",
-      "music": "music/검정치마 Antifreeze.m4a",
-      "sheets": [
-        "sheets/검정치마 - Antifreeze2 (2).png"
-      ],
-      "similarity": 68.2
     },
     {
       "artist": "겨울왕국 OST",
