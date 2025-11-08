@@ -955,8 +955,6 @@ sortedArtists.forEach(artist => {
         allSongs.push(songData);  // 정렬된 순서대로 추가
     });
 });
-
-            const sortedArtists = Object.keys(artistMap).sort((a, b) => a.localeCompare(b, 'ko'));
             
             let html = '<div class="artist-list">';
             sortedArtists.forEach(artist => {
