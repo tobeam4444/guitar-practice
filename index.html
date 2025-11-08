@@ -1043,43 +1043,38 @@ artistMap[artist].forEach((songData) => {
                 sheetSection.innerHTML = '<div class="no-sheet">악보가 없습니다</div>';
             }
 
-            if (songData.musicPath) {
-                audioPlayer.src = songData.musicPath;
-                audioPlayer.playbackRate = popupPlaybackRate;
-                audioPlayer.style.display = 'block';
-                audioPlayer.loop = false; // loop 속성 명시적으로 false 설정
-                currentAudio = audioPlayer;
+if (songData.musicPath) {
+    audioPlayer.src = songData.musicPath;
+    audioPlayer.playbackRate = popupPlaybackRate;
+    audioPlayer.style.display = 'block';
+    audioPlayer.loop = false;
+    currentAudio = audioPlayer;
 
-// 기존 이벤트 리스너 제거
-audioPlayer.onended = null;
-
-// 새 이벤트 리스너 추가
-audioPlayer.addEventListener('ended', function handleEnded() {
-    console.log('곡 종료, 이어듣기 설정:', settings.loopEnabled);
-    
-    // 카운트다운 타이머 정리
-    if (countdownTimer) {
-        clearInterval(countdownTimer);
-        countdownTimer = null;
-    }
-    
-    if (settings.loopEnabled) {
-        const songList = isSearchMode ? filteredSongs : allSongs;
-        if (currentSongIndex < songList.length - 1) {
-            playSong(currentSongIndex + 1);
-        } else {
-            playSong(0);
+    // onended 속성으로 교체 (중복 방지)
+    audioPlayer.onended = function() {
+        console.log('곡 종료, 이어듣기 설정:', settings.loopEnabled);
+        
+        if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
         }
-    } else {
-        // 이어듣기가 꺼져 있으면 같은 곡 반복
-        const sheetSection = document.getElementById('sheetMusicSection');
-        sheetSection.scrollTop = 0;
-        audioPlayer.currentTime = 0;
-        audioPlayer.play().catch(err => {
-            console.error('재생 오류:', err);
-        });
-    }
-});
+        
+        if (settings.loopEnabled) {
+            const songList = isSearchMode ? filteredSongs : allSongs;
+            if (currentSongIndex < songList.length - 1) {
+                playSong(currentSongIndex + 1);
+            } else {
+                playSong(0);
+            }
+        } else {
+            const sheetSection = document.getElementById('sheetMusicSection');
+            sheetSection.scrollTop = 0;
+            audioPlayer.currentTime = 0;
+            audioPlayer.play().catch(err => {
+                console.error('재생 오류:', err);
+            });
+        }
+    };
                 let countdown = settings.countdownSeconds;
                 document.getElementById('countdown').textContent = `${countdown}초 후 자동 재생됩니다...`;
                 
