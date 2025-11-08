@@ -369,23 +369,23 @@
             background: rgba(255,255,255,0.3);
         }
         
-        .player-section {
-            background: rgba(255,255,255,0.1);
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
+.player-section {
+    background: rgba(255,255,255,0.1);
+    padding: 8px;         /* 10px에서 변경 */
+    border-radius: 10px;
+    margin-bottom: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
         
-        .countdown {
-            color: #ffd700;
-            text-align: center;
-            font-size: 1em;
-            margin-bottom: 8px;
-            min-height: 25px;
-        }
+ .countdown {
+    color: #ffd700;
+    text-align: center;
+    font-size: 0.85em;     /* 1em에서 변경 */
+    margin-bottom: 4px;    /* 8px에서 변경 */
+    min-height: 12px;      /* 25px에서 변경 */
+}
         
         audio {
             width: 100%;
@@ -547,7 +547,11 @@
             .popup-title {
                 font-size: 1.3em;
             }
-            
+
+            .speed-controls button {
+    padding: 10px 16px;
+    font-size: 1em;
+}
 /* 데스크톱/태블릿에서 악보 수평 정렬 및 높이 최적화 */
 .sheet-music-section {
     flex-direction: row;
