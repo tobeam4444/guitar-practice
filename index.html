@@ -416,6 +416,7 @@ h1 {
         }
 
         /* 모바일 반응형: 200px~632px */
+/* 모바일 반응형: 200px~632px */
 @media (max-width: 632px) {
     .control-label {
         font-size: clamp(0.65em, 2.5vw, 0.85em);
@@ -428,19 +429,28 @@ h1 {
     }
     
     .slider {
-        height: clamp(4px, 1vw, 6px);
+        height: clamp(4px, 1vw, 6px) !important;
     }
     
     .slider::-webkit-slider-thumb {
-        width: clamp(14px, 4vw, 20px);
-        height: clamp(14px, 4vw, 20px);
-        border-width: clamp(2px, 0.5vw, 3px);
+        width: clamp(14px, 4vw, 20px) !important;
+        height: clamp(14px, 4vw, 20px) !important;
+        border-width: clamp(2px, 0.5vw, 3px) !important;
+        margin-top: clamp(-5px, -1.5vw, -7px) !important;
     }
     
     .slider::-moz-range-thumb {
-        width: clamp(14px, 4vw, 20px);
-        height: clamp(14px, 4vw, 20px);
-        border-width: clamp(2px, 0.5vw, 3px);
+        width: clamp(14px, 4vw, 20px) !important;
+        height: clamp(14px, 4vw, 20px) !important;
+        border-width: clamp(2px, 0.5vw, 3px) !important;
+    }
+    
+    .slider::-webkit-slider-runnable-track {
+        height: clamp(4px, 1vw, 6px) !important;
+    }
+    
+    .slider::-moz-range-track {
+        height: clamp(4px, 1vw, 6px) !important;
     }
     
     .control-row {
