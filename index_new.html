@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기타 연습용 음악 플레이어</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎸 기타 연습용 음악 플레이어</h1>
+        
+        <div class="controls-section">
+            <div class="control-row">
+                <div class="control-label">재생속도</div>
+                <input type="range" id="speedSlider" min="0.6" max="1.5" step="0.1" value="1.0" class="slider">
+                <span id="speedValue" class="value-display">1.0x</span>
+            </div>
+            
+            <div class="control-row">
+                <div class="control-label">자동재생</div>
+                <input type="range" id="countdownSlider" min="1" max="10" step="1" value="10" class="slider">
+                <span id="countdownValue" class="value-display">10초</span>
+            </div>
+            
+            <div class="stats-row">
+                <div class="stat-box music">
+                    <h3>🎵 음악</h3>
+                    <div class="count" id="musicCount">0</div>
+                </div>
+                <div class="stat-box sheet">
+                    <h3>📄 악보</h3>
+                    <div class="count" id="sheetCount">0</div>
+                </div>
+            </div>
+            
+            <div class="toggle-row">
+                <div class="toggle-label">다음곡자동듣기</div>
+                <div class="toggle-switch" id="loopToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            
+            <div class="toggle-row">
+                <div class="toggle-label">자동스크롤</div>
+                <div class="toggle-switch active" id="autoScrollToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            
+            <div class="toggle-row">
+                <div class="toggle-label">💖 찜한곡만보기</div>
+                <div class="toggle-switch" id="favoriteToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="search-bar" id="searchBar" style="display: none;">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 가수 또는 곡명으로 검색하세요...">
+        </div>
+        
+        <div id="artistList" class="loading">
+            파일 목록을 불러오는 중... 🎵
+        </div>
+    </div>
+    
+    <div id="popup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <div class="popup-title" id="popupTitle"></div>
+                <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶</button>
+                <button class="close-btn" onclick="closePopup()">✕</button>
+            </div>
+            
+            <div class="player-section">
+                <div class="countdown" id="countdown"></div>
+                <audio id="audioPlayer" controls></audio>
+                <div class="speed-controls" id="speedControls"></div>
+            </div>
+            
+            <div class="sheet-music-section" id="sheetMusicSection">
+                <div class="no-sheet">악보를 불러오는 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
